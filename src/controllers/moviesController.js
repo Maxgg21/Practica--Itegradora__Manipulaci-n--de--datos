@@ -161,9 +161,28 @@ const moviesController = {
     },
     delete: function (req, res) {
         // TODO
+        const MOVIE_ID = req.params.id;
+        Movie.findByPk(MOVIE_ID)
+        .then(movieToDelete => {
+            return res.render("moviesDelete", 
+            {Movie: movieToDelete}
+            )
+        })
+        .catch(error => console.log(error))
     },
     destroy: function (req, res) {
         // TODO
+        const {id : MOVIE_ID} = req.params;
+
+        Movie.destroy({
+            where: {
+                id : MOVIE_ID
+            }, 
+            include: [{association: 'actores'}]
+        }).then(()=> {
+            return res.redirect('/movies')
+        })
+        .catch(error => console.log(error))
     }
 };
 
